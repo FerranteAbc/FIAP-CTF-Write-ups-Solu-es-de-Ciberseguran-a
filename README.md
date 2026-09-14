@@ -6,8 +6,7 @@
 
 ## 📌 Visão Geral
 
-Este repositório reúne os relatórios técnicos (*write-ups*) dos laboratórios e desafios de CTF concluídos, cobrindo cenários práticos de Inteligência de Fontes Abertas (**OSINT**), Engenharia Social, Análise Forense de Logs, Threat Intelligence e Resposta a Incidentes.
-
+EWrite-ups e relatórios técnicos de CTF cobrindo OSINT, Engenharia Social, Forense de Logs e Threat Intelligence (MITRE ATT&CK, Pyramid of Pain) — Defesa Cibernética FIAP.
 ---
 
 ## 🛠️ Ferramentas & Metodologias Utilizadas
