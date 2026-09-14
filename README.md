@@ -6,7 +6,7 @@
 
 ## 📌 Visão Geral
 
-EWrite-ups e relatórios técnicos de CTF cobrindo OSINT, Engenharia Social, Forense de Logs e Threat Intelligence (MITRE ATT&CK, Pyramid of Pain) — Defesa Cibernética FIAP.
+Write-ups e relatórios técnicos de CTF cobrindo OSINT, Engenharia Social, Forense de Logs e Threat Intelligence (MITRE ATT&CK, Pyramid of Pain) — Defesa Cibernética FIAP.
 ---
 
 ## 🛠️ Ferramentas & Metodologias Utilizadas
