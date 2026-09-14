@@ -4,26 +4,6 @@
 
 ---
 
-## 📑 Índice Geral
-
-1. [FIAP Challenge — Cyber Defense Project](#-parte-1--fiap-challenge--cyber-defense-project)
-   * [Visão Geral](#11-visão-geral)
-   * [Stack Tecnológica](#12-stack-tecnológica)
-   * [Arquitetura do Lab](#13-arquitetura-do-ambiente-de-testes-lab)
-   * [Fases do Projeto](#14-fases-do-projeto)
-2. [CTF Trilha 1 — OSINT, Threat Intelligence & Forense de Redes](#-parte-2--ctf-trilha-1--osint-threat-intelligence--forense-de-redes)
-   * [Ferramentas Utilizadas](#21-ferramentas--metodologias)
-   * [Detalhamento dos Desafios](#22-detalhamento-técnico-dos-desafios)
-   * [Resumo & Status](#23-resumo-das-flags--status)
-3. [CTF Trilha 2 — Hardware Hacking, OWASP IoTGoat & Forense Digital](#-parte-3--ctf-trilha-2--hardware-hacking-owasp-iotgoat--forense-digital)
-   * [Ferramentas Utilizadas](#31-ferramentas--metodologias)
-   * [Detalhamento dos Desafios](#32-detalhamento-técnico-dos-desafios)
-   * [Resumo & Status](#33-resumo-das-flags--status)
-4. [Estrutura Completa do Repositório](#-estrutura-consolidada-do-repositório)
-5. [Autor](#-autor)
-
----
-
 ## 🏢 PARTE 1 — FIAP Challenge — Cyber Defense Project
 
 ### 1.1 Visão Geral
