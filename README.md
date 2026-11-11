@@ -220,6 +220,85 @@ pdf-parser --search "flag" documento_alvo.pdf
 | **E-mail Suspeito** | RFC 822 / Cabeçalhos | Rastreamento SMTP e validação SPF/DKIM | Editores RFC, `grep`, CyberChef | `[Concluído]` |
 | **Documento Perdido** | Estrutura de Arquivo | File carving e extração de metadados ocultos | `exiftool`, `pdf-parser` | `[Concluído]` |
 
+## 🎮 PARTE 4 — Global Solution 2 — CTF WARGAMES 2TDCOR (Pentest Web, Protocolos & Forense de Logs)
+### 4.1 Visão Geral
+Resolução completa dos 20 desafios da Global Solution 2, numa plataforma CTFd customizada ([2TDCOR WARGAMES](https://2tdcor.cyberwargames.com.br/)), contra um alvo único (`45.55.126.134`) expondo HTTP (Apache), FTP (ProFTPD), SSH (OpenSSH) e SMB (Samba) — tema fictício "MODERNA CORP".
+
+### 4.2 Ferramentas & Metodologias
+* **Varredura & Enumeração:** Nmap, Gobuster, curl.
+* **Quebra de Credenciais:** Hydra, CUPP (geração de wordlist por OSINT), John the Ripper + RockYou, zip2john.
+* **Protocolos de Arquivo/Compartilhamento:** `ftplib` (Python), `smbclient`.
+* **Forense de Logs Windows:** `python-evtx`, `grep`/`awk` sobre XML de Event Log.
+
+### 4.3 Detalhamento Técnico dos Desafios
+
+#### Misconfiguration (phpinfo exposto)
+* **Atividade:** Localização de arquivo de diagnóstico PHP esquecido em produção.
+* **Procedimento:** Enumeração de diretórios via Gobuster revelou `/info.php` (76 KB) com a saída completa do `phpinfo()`, expondo configuração do servidor.
+```
+bash
+gobuster dir -u http://45.55.126.134/ -w /usr/share/wordlists/dirb/common.txt -x zip,tar,gz,rar,7z,bak,log,sql -t 50 -q
+```
+Write-up completo: [`ctf-wargames-2tdcor/misconfiguration/`](./ctf-wargames-2tdcor/misconfiguration/writeup.md)
+
+#### Pensando Fora da Caixa (OSINT → Dicionário → FTP)
+* **Atividade:** Construção de wordlist personalizada a partir de dados pessoais vazados para quebrar credencial de FTP.
+* **Procedimento:** Extração de `/backups/pessoal.txt`, geração de dicionário com `cupp -i` (padrão "palavra + caractere especial"), ataque de dicionário via Hydra contra ProFTPD e extração do `.flag` oculto via `ftplib`.
+```
+bash
+cupp -i
+hydra -l ubirajara -P ubirajara.txt ftp://45.55.126.134 -t 1 -f -V
+```
+Write-up completo: [`ctf-wargames-2tdcor/pensando-fora-da-caixa/`](./ctf-wargames-2tdcor/pensando-fora-da-caixa/writeup.md)
+
+#### Somente Dispositivos Autorizados (Bypass de User-Agent)
+* **Atividade:** Contorno de controle de acesso baseado em cabeçalho `User-Agent` num diretório `/intranet/` restrito.
+* **Procedimento:** Script em Bash testando múltiplos identificadores de dispositivo contra o endpoint até identificar o único aceito (`BlackBerry`).
+```
+bash
+curl -A "BlackBerry" http://45.55.126.134/intranet/
+```
+Write-up completo: [`ctf-wargames-2tdcor/somente-dispositivos-autorizados/`](./ctf-wargames-2tdcor/somente-dispositivos-autorizados/writeup.md)
+
+#### Protocolo Vulnerável (Enumeração SMB + Quebra de Senha)
+* **Atividade:** Identificação do protocolo vulnerável real (SMB, não FTP) via fingerprint de serviço, e exploração de sessão nula + credencial fraca.
+* **Procedimento:** Enumeração anônima de compartilhamentos SMB vazou o usuário `opteron`; quebra via RockYou revelou a senha `sayang`; acesso ao share e extração do `.flag`.
+```
+bash
+smbclient -L //45.55.126.134/ -N -m SMB3
+smbclient //45.55.126.134/opteron -U opteron%sayang -m SMB3 -c "get .flag"
+```
+Write-up completo: [`ctf-wargames-2tdcor/protocolo-vulneravel/`](./ctf-wargames-2tdcor/protocolo-vulneravel/writeup.md)
+
+#### Investigação (Forense de Windows Event Log)
+* **Atividade:** Localização de arquivo ZIP "esquecido", quebra de senha e análise forense de logs `.evtx` para identificar IP de movimentação lateral.
+* **Procedimento:** Download de `investiga.zip` (ZipCrypto), quebra via `zip2john`/John+RockYou, conversão dos `.evtx` para XML com `python-evtx` e filtragem de eventos de acesso a compartilhamento administrativo.
+```
+bash
+zip2john investiga.zip > investiga.hash
+john --wordlist=/usr/share/wordlists/rockyou.txt investiga.hash
+grep -i '192.168.37.129' ev.xml | grep -oEi '<Data Name="(TargetUserName|IpAddress)">[^<]*</Data>'
+```
+Write-up completo: [`ctf-wargames-2tdcor/investigacao/`](./ctf-wargames-2tdcor/investigacao/writeup.md)
+
+### 4.4 Resumo das Flags & Status
+
+| Desafio | Categoria | Vetor / Técnica Principal | Ferramentas | Status |
+| :--- | :--- | :--- | :--- | :---: |
+| **Misconfiguration** | Web Misconfig | `phpinfo()` exposto | `gobuster`, `curl` | `[Concluído]` |
+| **Pensando Fora da Caixa** | Credential Cracking | OSINT → dicionário customizado → brute force FTP | `cupp`, `hydra` | `[Concluído]` |
+| **Somente Dispositivos Autorizados** | Access Control Bypass | Spoofing de `User-Agent` | `curl`, Bash | `[Concluído]` |
+| **Protocolo Vulnerável** | SMB / Credential Cracking | Sessão nula + dicionário RockYou | `smbclient`, `nmap` | `[Concluído]` |
+| **Investigação** | Forense Windows (.evtx) | Quebra de ZIP + análise de Event Log | `zip2john`, `John`, `python-evtx` | `[Concluído]` |
+| **A Chave do Sucesso** | Criptografia | GPG | `gpg` | `[Concluído]` |
+| **Lorem Ipsum** | Criptografia Clássica | Cifra de César | — | `[Concluído]` |
+| **Protegido** 🏅 | Ofuscação | Deobfuscação (first blood) | — | `[Concluído]` |
+| **Metadata** | Esteganografia/Metadados | EXIF | `exiftool` | `[Concluído]` |
+| **Listagem Permitida** | Web Misconfig | Directory listing / comentário HTML | `curl` | `[Concluído]` |
+| **+ 10 desafios "Hacking Tests"** | Diversos | Varredura, pacotes, SMB, Wi-Fi, injeção, LOLBAS, dicionários | Nmap, Wireshark, etc. | `[Concluído]` |
+
+Lista completa e detalhes adicionais em [`ctf-wargames-2tdcor/README.md`](./ctf-wargames-2tdcor/README.md).
+
 ## 📁 Estrutura Consolidada do Repositório
 
 ```text
@@ -270,6 +349,18 @@ pdf-parser --search "flag" documento_alvo.pdf
 │       │   └── writeup.md
 │       └── documento-perdido/
 │           └── writeup.md
+├── ctf-wargames-2tdcor/
+│   ├── README.md
+│   ├── misconfiguration/
+│   │   └── writeup.md
+│   ├── pensando-fora-da-caixa/
+│   │   └── writeup.md
+│   ├── somente-dispositivos-autorizados/
+│   │   └── writeup.md
+│   ├── protocolo-vulneravel/
+│   │   └── writeup.md
+│   └── investigacao/
+│       └── writeup.md
 ├── scripts/
 │   ├── hash_verifier.py
 │   └── extract_firmware.sh
