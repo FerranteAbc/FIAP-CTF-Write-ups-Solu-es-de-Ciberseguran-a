@@ -1,6 +1,6 @@
-# 🎮 CTF WARGAMES — 2TDCOR (Global Solution 2)
+# 🎮 CTF WARGAMES — 2TDCOR (CTF Fase 3)
 
-> Write-ups da **Global Solution (GS2)** do curso de Defesa Cibernética — FIAP, resolvida na plataforma [2TDCOR WARGAMES](https://2tdcor.cyberwargames.com.br/), estilo CTFd. Prazo de entrega: **10/11/2026**.
+> Write-ups do **CTF Fase 3** do curso de Defesa Cibernética — FIAP, resolvido na plataforma [2TDCOR WARGAMES](https://2tdcor.cyberwargames.com.br/), estilo CTFd. Prazo de entrega: **10/11/2026**.
 
 **Alvo principal:** `http://45.55.126.134/` (servidor Apache/Debian, expondo HTTP, FTP/ProFTPD, SSH e SMB/Samba — tema "MODERNA CORP").
 

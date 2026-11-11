@@ -220,9 +220,9 @@ pdf-parser --search "flag" documento_alvo.pdf
 | **E-mail Suspeito** | RFC 822 / Cabeçalhos | Rastreamento SMTP e validação SPF/DKIM | Editores RFC, `grep`, CyberChef | `[Concluído]` |
 | **Documento Perdido** | Estrutura de Arquivo | File carving e extração de metadados ocultos | `exiftool`, `pdf-parser` | `[Concluído]` |
 
-## 🎮 PARTE 4 — Global Solution 2 — CTF WARGAMES 2TDCOR (Pentest Web, Protocolos & Forense de Logs)
+## 🎮 PARTE 4 — CTF Fase 3 — CTF WARGAMES 2TDCOR (Pentest Web, Protocolos & Forense de Logs)
 ### 4.1 Visão Geral
-Resolução completa dos 20 desafios da Global Solution 2, numa plataforma CTFd customizada ([2TDCOR WARGAMES](https://2tdcor.cyberwargames.com.br/)), contra um alvo único (`45.55.126.134`) expondo HTTP (Apache), FTP (ProFTPD), SSH (OpenSSH) e SMB (Samba) — tema fictício "MODERNA CORP".
+Resolução completa dos 20 desafios do CTF Fase 3, numa plataforma CTFd customizada ([2TDCOR WARGAMES](https://2tdcor.cyberwargames.com.br/)), contra um alvo único (`45.55.126.134`) expondo HTTP (Apache), FTP (ProFTPD), SSH (OpenSSH) e SMB (Samba) — tema fictício "MODERNA CORP".
 
 ### 4.2 Ferramentas & Metodologias
 * **Varredura & Enumeração:** Nmap, Gobuster, curl.
